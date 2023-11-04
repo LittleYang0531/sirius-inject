@@ -46,8 +46,8 @@ jobs:
           sed -i s/com.kms.worlddaistar/com.kms.worlddaistar2/g config.arm64_v8a/AndroidManifest.xml
           sed -i s/com.kms.worlddaistar/com.kms.worlddaistar2/g UnityDataAssetPack/AndroidManifest.xml
           sed -i s/com.kms.worlddaistar2.UnityPlayerActivityOverride/com.kms.worlddaistar.UnityPlayerActivityOverride/g com.kms.worlddaistar/AndroidManifest.xml
-          sed -i s/application/application\ android:networkSecurityConfig=\"@xml\\/network_security_config\"\ android:debuggable=\"true\"/g com.kms.worlddaistar/AndroidManifest.xml
-          sed -i s/targetSdkVersion:\ \'33\'/targetSdkVersion:\ \'29\'/g com.kms.worlddaistar/apktool.yml
+          sed -i s/application\ /application\ android:networkSecurityConfig=\"@xml\\/network_security_config\"\ android:debuggable=\"true\"\ /g com.kms.worlddaistar/AndroidManifest.xml
+          sed -i s/targetSdkVersion:\ 33/targetSdkVersion:\ 29/g com.kms.worlddaistar/apktool.yml
           cat com.kms.worlddaistar/AndroidManifest.xml
           cat com.kms.worlddaistar/apktool.yml
 
