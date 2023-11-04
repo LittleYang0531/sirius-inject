@@ -29,27 +29,34 @@ module.exports = {
                 var url = requestDetail.protocol + ":" + requestDetail.requestOptions.path;
                 if (url.indexOf("assets.wds") !== -1) url = "http://corsproxy.org/?" + encodeURIComponent(requestDetail.protocol + ":" + requestDetail.requestOptions.path);
                 console.log(url);
-                var x = new URL(url);                                                                                                                var options = requestDetail.requestOptions;
+                var x = new URL(url);
+                var options = requestDetail.requestOptions;
                 options.hostname = x.hostname;
-                options.path = x.pathname + x.search;                                                                                                options.port = (x.protocol == "https:") ? 443 : 80;
+                options.path = x.pathname + x.search;
+                options.port = (x.protocol == "https:") ? 443 : 80;
                 if (url.indexOf("assets.wds") !== -1) options.headers = {};
                 var ret = {
                         url: url,
-                        requestOptions: options,                                                                                                             protocol: x.protocol.substr(0, x.protocol.length - 1)
+                        requestOptions: options,
+                        protocol: x.protocol.substr(0, x.protocol.length - 1)
                 }; console.log(ret);
                 return ret;
         }
 /*      if (requestDetail.requestOptions.hostname.indexOf("cdp.cloud.unity3d.com") != -1) {
                 console.log("Hacked2");
-                var url = "https://corsproxy.org/?" + encodeURIComponent(requestDetail.url);                                                         console.log(url);
+                var url = "https://corsproxy.org/?" + encodeURIComponent(requestDetail.url);
+                console.log(url);
                 var x = new URL(url);
-                var options = requestDetail.requestOptions;                                                                                          options.hostname = x.hostname;
+                var options = requestDetail.requestOptions;
+                options.hostname = x.hostname;
                 options.path = x.pathname + x.search;
-                var ret = {                                                                                                                                  url: url,
+                var ret = {
+                        url: url,
                         requestOptions: options
                 }; return ret;
         }*/
-        },                                                                                                                                   /**beforeDealHttpsRequest(requestDetail) {
+        },
+        /**beforeDealHttpsRequest(requestDetail) {
                 if (requestDetail.host.indexOf("unity3d.com") !== -1 || requestDetail.host.indexOf("wds-stellarium.com") !== -1) requestDetail.host = "corsproxy.org";
                 console.log("Hacked");
                 return true;
