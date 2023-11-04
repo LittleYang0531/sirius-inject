@@ -34,7 +34,7 @@ jobs:
         run: |
           java -jar apktool.jar d com.kms.worlddaistar.apk
           java -jar apktool.jar d config.arm64_v8a.apk
-          jara -jar apktool.jar d UnityDataAssetPack.apk
+          java -jar apktool.jar d UnityDataAssetPack.apk
 
       - name: Edit Packages
         run: |
