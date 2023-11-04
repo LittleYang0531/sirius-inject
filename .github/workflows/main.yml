@@ -62,4 +62,4 @@ jobs:
           name: ${{ github.event.inputs.ver }}
           draft: false
           prerelease: false
-          files: ./result/*_signed.apk
+          files: ./*_signed.apk
