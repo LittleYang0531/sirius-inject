@@ -1,0 +1,62 @@
+name: Inject (ubuntu-latest)
+
+on: 
+  workflow_dispatch:
+    inputs:
+      ver:
+        description: 'Package Version'
+        required: true
+        default: ''
+
+jobs:
+  inject:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Prepare Environment
+        run: |
+          sudo apt update
+          sudo apt install php php-curl curl libnss3 nss-plugin-pem ca-certificates python3 openjdk-17-jdk -y
+          # Prepare curl-impersonate
+          wget https://github.com/lwthiker/curl-impersonate/releases/download/v0.5.4/curl-impersonate-v0.5.4.x86_64-linux-gnu.tar.gz -O curl.tar.gz
+          tar -xvf curl.tar.gz
+          # Prepare apktool
+          wget https://github.com/iBotPeaches/Apktool/releases/download/v2.9.0/apktool_2.9.0.jar -O apktool.jar
+
+      - name: Fetch Application Installer
+        run: |
+          ./curl_chrome110 --parallel --parallel-immediate --parallel-max 64 -L -k -C - -o sirius.xapk https://d.apkpure.com/b/XAPK/com.kms.worlddaistar?version=latest
+          unzip sirius.xapk
+
+      - name: Unpack Packages
+        run: |
+          java -jar apktool.jar d com.kms.worlddaistar.apk
+          java -jar apktool.jar d config.arm64_v8a.apk
+          jara -jar apktool.jar d UnityDataAssetPack.apk
+
+      - name: Edit Packages
+        run: |
+          
+
+      - name: Repack Packages
+        run: |
+          java -jar apktool.jar b com.kms.worlddaistar -o base.apk
+          java -jar apktool.jar b config.arm64_v8a -o config.apk
+          java -jar apktool.jar b UnityDataAssetPack -o unity.apk
+
+      - name: Sign Packages
+        run: |
+          jarsigner -verbose -keystore abc.keystore -storepass 123456 -signedjar base_signed.apk base.apk abc.keystore
+          jarsigner -verbose -keystore abc.keystore -storepass 123456 -signedjar config_signed.apk config.apk abc.keystore
+          jarsigner -verbose -keystore abc.keystore -storepass 123456 -signedjar unity_signed.apk unity.apk abc.keystore
+
+      - name: Uploading Packages
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ github.event.inputs.ver }}
+          name: ${{ github.event.inputs.ver }}
+          draft: false
+          prerelease: false
+          files: ./result/*_signed.apk
