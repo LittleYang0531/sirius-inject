@@ -30,7 +30,7 @@ jobs:
 
       - name: Fetch Application Installer
         run: |
-          ./curl_chrome110 --parallel --parallel-immediate --parallel-max 64 -L -k -C - -o sirius.xapk "https://d.apkpure.com/b/APK/com.kms.worlddaistar?versionCode=72&nc=arm64-v8a&sv=22"
+          ./curl_chrome110 --parallel --parallel-immediate --parallel-max 64 -L -k -C - -o sirius.xapk "https://d.apkpure.com/b/XAPK/com.kms.worlddaistar?versionCode=72&nc=arm64-v8a&sv=22"
           unzip sirius.xapk
 
       - name: Unpack Packages
