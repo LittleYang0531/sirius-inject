@@ -1,4 +1,4 @@
-name: Inject (ubuntu-latest)
+name: Inject XAPK (ubuntu-latest)
 
 on: 
   workflow_dispatch:
