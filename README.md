@@ -12,7 +12,17 @@
 - Install by command below:
 
 ```bash
-adb install-multiple base_signed.apk config_signed.apk unity_signed.apk
+adb install-multiple base_signed.apk config_signed.apk unity_signed.apk # for multiple packages
+adb install sirius_signed.apk # for single package
+```
+
+Or:
+
+```bash
+adb shell
+cp *_signed.apk /data/local/tmp/ && cd /data/local/tmp/
+pm install base_signed.apk config_signed.apk unity_signed.apk # for multiple packages
+pm install sirius_signed.apk # for single package
 ```
 
 ## Anyproxy Script
