@@ -1,0 +1,64 @@
+name: Inject APK (ubuntu-latest)
+
+on: 
+  workflow_dispatch:
+    inputs:
+      ver:
+        description: 'Package Version'
+        required: true
+        default: ''
+
+jobs:
+  inject:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+      
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Prepare Environment
+        run: |
+          sudo apt update
+          sudo apt install php php-curl curl libnss3 nss-plugin-pem ca-certificates python3 openjdk-17-jdk -y
+          # Prepare curl-impersonate
+          wget https://github.com/lwthiker/curl-impersonate/releases/download/v0.5.4/curl-impersonate-v0.5.4.x86_64-linux-gnu.tar.gz -O curl.tar.gz
+          tar -xvf curl.tar.gz
+          # Prepare apktool
+          wget https://github.com/iBotPeaches/Apktool/releases/download/v2.9.0/apktool_2.9.0.jar -O apktool.jar
+
+      - name: Fetch Application Installer
+        run: |
+          ./curl_chrome110 --parallel --parallel-immediate --parallel-max 64 -L -k -C - -o sirius.apk "https://d.cdnpure.com/b/APK/com.kms.worlddaistar?version=latest"
+
+      - name: Unpack Packages
+        run: |
+          java -jar apktool.jar d sirius.apk
+
+      - name: Edit Packages
+        run: |
+          cp network_security_config.xml sirius/res/xml
+          sed -i s/com.kms.worlddaistar/com.kms.worlddaistar2/g sirius/AndroidManifest.xml
+          sed -i s/com.kms.worlddaistar2.UnityPlayerActivityOverride/com.kms.worlddaistar.UnityPlayerActivityOverride/g sirius/AndroidManifest.xml
+          sed -i s/application\ /application\ android:networkSecurityConfig=\"@xml\\/network_security_config\"\ android:debuggable=\"true\"\ /g sirius/AndroidManifest.xml
+          sed -i s/targetSdkVersion:\ 33/targetSdkVersion:\ 29/g sirius/apktool.yml
+          cat sirius/AndroidManifest.xml
+          cat sirius/apktool.yml
+
+      - name: Repack Packages
+        run: |
+          java -jar apktool.jar b sirius -o sirius.apk
+
+      - name: Sign Packages
+        run: |
+          jarsigner -verbose -keystore abc.keystore -storepass 123456 -signedjar sirius_signed.apk sirius.apk abc.keystore
+
+      - name: Uploading Packages
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ github.event.inputs.ver }}
+          name: ${{ github.event.inputs.ver }}
+          draft: false
+          prerelease: false
+          files: ./*_signed.apk
