@@ -21,7 +21,6 @@ jobs:
       - name: Run Script
         run: | 
             bash run.sh
-            echo "VERSION=$VERSION" >> "$GITHUB_ENV"
             cat $GITHUB_ENV
     
       - name: Uploading Packages

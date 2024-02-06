@@ -31,8 +31,6 @@ if [[ $isXAPK == 0 ]]; then
     sed -i s/com.kms.worlddaistar2.UnityPlayerActivityOverride/com.kms.worlddaistar.UnityPlayerActivityOverride/g sirius/AndroidManifest.xml
     sed -i s/application\ /application\ android:networkSecurityConfig=\"@xml\\/network_security_config\"\ android:debuggable=\"true\"\ /g sirius/AndroidManifest.xml
     sed -i s/targetSdkVersion:\ 33/targetSdkVersion:\ 29/g sirius/apktool.yml
-    cat sirius/AndroidManifest.xml
-    cat sirius/apktool.yml
 
     echo -e "$YELLOW""Repacking Package...""$WHITE"
     java -jar apktool.jar b sirius -o sirius.apk
@@ -40,3 +38,8 @@ if [[ $isXAPK == 0 ]]; then
     echo -e "$YELLOW""Signing Package...""$WHITE"
     jarsigner -verbose -keystore abc.keystore -storepass 123456 -signedjar sirius_signed.apk sirius.apk abc.keystore
 fi
+
+echo -e "$YELLOW""Setting Github Environment Variables...""$WHITE"
+echo "VERSION=$VERSION" >> "$GITHUB_ENV"
+
+echo -e "$YELLOW""Finished!""$WHITE"
