@@ -15,12 +15,21 @@ jobs:
 
       - name: Prepare Environment
         run: |
-          sudo dpkg --add-architecture i386
           sudo apt update
-          sudo apt install php php-curl curl libnss3 nss-plugin-pem ca-certificates python3 openjdk-17-jdk wine -y
+          sudo apt install php php-curl curl libnss3 nss-plugin-pem ca-certificates python3 openjdk-17-jdk -y
 
       - name: Run Script
         run: bash run.sh
+        
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: il2cpp
+          path: |
+            ./global-metadata.dat
+            ./libil2cpp.so
+            ./appVersion.txt
+            ./Il2CppDumper.zip
     
       - name: Uploading Packages
         uses: softprops/action-gh-release@v1
@@ -31,4 +40,27 @@ jobs:
           prerelease: false
           files: |
             ./*_signed.apk
+
+  dump:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Download Artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: il2cpp
+
+      - name: Dumping
+        run: run.bat
+
+      - name: Uploading Dump.cs
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ env.VERSION }}
+          name: ${{ env.VERSION }}
+          draft: false
+          prerelease: false
+          files: |
             ./output/dump.cs
