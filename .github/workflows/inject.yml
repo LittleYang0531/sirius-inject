@@ -31,15 +31,6 @@ jobs:
             ./libil2cpp.so
             ./appVersion.txt
             ./Il2CppDumper.zip
-    
-      - name: Uploading Packages
-        uses: softprops/action-gh-release@v1
-        with:
-          tag_name: ${{ env.VERSION }}
-          name: ${{ env.VERSION }}
-          draft: false
-          prerelease: false
-          files: |
             ./*_signed.apk
 
   dump:
@@ -76,3 +67,4 @@ jobs:
           prerelease: false
           files: |
             ./output/dump.cs
+            ./*_signed.apk
