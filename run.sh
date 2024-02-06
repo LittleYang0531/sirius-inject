@@ -2,13 +2,16 @@ YELLOW='\033[1;33m'
 WHITE='\033[0m'
 
 # Prepare curl-impersonate
-echo -e "$YELLOW""Installing curl-impersonate.tar.gz...""$WHITE"
+echo -e "$YELLOW""Downloading curl-impersonate.tar.gz...""$WHITE"
 curl https://github.com/lwthiker/curl-impersonate/releases/download/v0.5.4/curl-impersonate-v0.5.4.x86_64-linux-gnu.tar.gz -Lo curl.tar.gz
-echo -e "$YELLOW""Extracting curl.tar.gz...""$WHITE"
 tar -xvf curl.tar.gz >/dev/null
 # Prepare apktool
 echo -e "$YELLOW""Downloading apktool_2.9.0.jar...""$WHITE"
 curl https://github.com/iBotPeaches/Apktool/releases/download/v2.9.0/apktool_2.9.0.jar -Lo apktool.jar
+# Prepare Il2cppDumper
+echo -e "$YELLOW""Downloading Il2CppDumper...""$WHITE"
+curl https://github.com/Perfare/Il2CppDumper/releases/download/v6.7.40/Il2CppDumper-win-v6.7.40.zip -Lo Il2CppDumper.zip
+unzip Il2CppDumper.zip -q
 
 # Judge Application Type And Version
 echo -e "$YELLOW""Fetching Application Information...""$WHITE"
@@ -28,6 +31,8 @@ if [[ $isXAPK == 0 ]]; then
 
     echo -e "$YELLOW""Unpacking Package...""$WHITE"
     java -jar apktool.jar d sirius.apk
+    cp sirius/assets/bin/Data/Managed/Metadata/global-metadata.dat .
+    cp sirius/lib/arm64-v8a/libil2cpp.so .
 
     echo -e "$YELLOW""Editing Package...""$WHITE"
     cp network_security_config.xml sirius/res/xml
@@ -42,5 +47,9 @@ if [[ $isXAPK == 0 ]]; then
     echo -e "$YELLOW""Signing Package...""$WHITE"
     jarsigner -verbose -keystore abc.keystore -storepass 123456 -signedjar sirius_signed.apk sirius.apk abc.keystore
 fi
+
+echo -e "$YELLOW""Extracting dump.cs...""$WHITE"
+mkdir output
+./Il2CppDumper.exe libil2cpp.so global-metadata.dat output
 
 echo -e "$YELLOW""Finished!""$WHITE"

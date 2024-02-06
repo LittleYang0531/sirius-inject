@@ -19,9 +19,7 @@ jobs:
           sudo apt install php php-curl curl libnss3 nss-plugin-pem ca-certificates python3 openjdk-17-jdk -y
 
       - name: Run Script
-        run: | 
-            bash run.sh
-            cat $GITHUB_ENV
+        run: bash run.sh
     
       - name: Uploading Packages
         uses: softprops/action-gh-release@v1
@@ -30,4 +28,6 @@ jobs:
           name: ${{ env.VERSION }}
           draft: false
           prerelease: false
-          files: ./*_signed.apk
+          files: |
+            ./*_signed.apk
+            ./output/dump.cs
