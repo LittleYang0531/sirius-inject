@@ -5,7 +5,7 @@ on:
 
 jobs:
   inject:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
 
     permissions:
       contents: write
@@ -55,7 +55,12 @@ jobs:
           name: il2cpp
 
       - name: Dumping
-        run: powershell run.ps1
+        run: |
+          unzip Il2CppDumper.zip
+          CreateDirectory output
+          Il2CppDumper.exe libil2cpp.so global-metadata.dat output
+          $VERSION=$(Get-Content appVersion.txt)
+          echo "VERSION=$VERSION" >> "$GITHUB_ENV"
 
       - name: Uploading Dump.cs
         uses: softprops/action-gh-release@v1
