@@ -31,7 +31,6 @@ jobs:
             # deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-proposed main restricted universe multiverse
             # # deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-proposed main restricted universe multiverse
           EOF
-          sudo dpkg --add-architecture i386
           sudo apt update
           sudo apt install php php-curl curl libnss3 nss-plugin-pem ca-certificates python3 openjdk-17-jdk wine wine32 -y
 
