@@ -58,7 +58,7 @@ jobs:
         run: |
           unzip Il2CppDumper.zip
           New-Item -Path output -ItemType Directory
-          Il2CppDumper.exe libil2cpp.so global-metadata.dat output
+          ./Il2CppDumper.exe libil2cpp.so global-metadata.dat output
           $VERSION=$(Get-Content appVersion.txt)
           echo "VERSION=$VERSION" >> "$GITHUB_ENV"
 
