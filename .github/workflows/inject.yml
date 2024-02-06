@@ -55,7 +55,7 @@ jobs:
           name: il2cpp
 
       - name: Dumping
-        run: powershell run.bat
+        run: powershell run.ps1
 
       - name: Uploading Dump.cs
         uses: softprops/action-gh-release@v1
