@@ -5,7 +5,7 @@ on:
 
 jobs:
   inject:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
 
     permissions:
       contents: write
@@ -16,12 +16,8 @@ jobs:
       - name: Prepare Environment
         run: |
           sudo dpkg --add-architecture i386
-          wget -qO - https://dl.winehq.org/wine-builds/winehq.key | sudo apt-key add -
-          sudo add-apt-repository ppa:cybermax-dexter/sdl2-backport
-          sudo apt-add-repository "deb https://dl.winehq.org/wine-builds/ubuntu $(lsb_release -cs) main"
-          sudo apt install --install-recommends wine-stable-i386 wine-stable winehq-stable -y
           sudo apt update
-          sudo apt install php php-curl curl libnss3 nss-plugin-pem ca-certificates python3 openjdk-17-jdk -y
+          sudo apt install php php-curl curl libnss3 nss-plugin-pem ca-certificates python3 openjdk-17-jdk wine wine32 -y
 
       - name: Run Script
         run: bash run.sh
