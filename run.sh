@@ -18,6 +18,10 @@ isXAPK=$([ -z "$(echo $HTML | grep -o "下载 XAPK")" ] && echo 0 || echo 1)
 echo -e "$YELLOW""Latest Version: $VERSION""$WHITE"
 echo -e "$YELLOW""Installer Type: "$([ $isXAPK == 1 ] && echo "XAPK" || echo "APK" )"$WHITE"
 
+# Set Github Environment Variables
+echo -e "$YELLOW""Setting Github Environment Variables...""$WHITE"
+echo "VERSION=v$VERSION" >> "$GITHUB_ENV"
+
 if [[ $isXAPK == 0 ]]; then
     echo -e "$YELLOW""Fetching Application Installer...""$WHITE"
     ./curl_chrome110 --parallel --parallel-immediate --parallel-max 64 -L -k -C - -o sirius.apk "https://d.cdnpure.com/b/APK/com.kms.worlddaistar?version=latest"
@@ -38,8 +42,5 @@ if [[ $isXAPK == 0 ]]; then
     echo -e "$YELLOW""Signing Package...""$WHITE"
     jarsigner -verbose -keystore abc.keystore -storepass 123456 -signedjar sirius_signed.apk sirius.apk abc.keystore
 fi
-
-echo -e "$YELLOW""Setting Github Environment Variables...""$WHITE"
-echo "VERSION=$VERSION" >> "$GITHUB_ENV"
 
 echo -e "$YELLOW""Finished!""$WHITE"
