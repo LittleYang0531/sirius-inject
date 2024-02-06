@@ -1,0 +1,34 @@
+name: Inject APK / XAPK (ubuntu-latest)
+
+on: 
+  workflow_dispatch:
+
+jobs:
+  inject:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+      
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Prepare Environment
+        run: |
+          sudo apt update
+          sudo apt install php php-curl curl libnss3 nss-plugin-pem ca-certificates python3 openjdk-17-jdk -y
+
+      - name: Run Script
+        run: | 
+            bash run.sh
+            echo "VERSION=$VERSION" >> "$GITHUB_ENV"
+            cat $GITHUB_ENV
+    
+      - name: Uploading Packages
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ env.VERSION }}
+          name: ${{ env.VERSION }}
+          draft: false
+          prerelease: false
+          files: ./*_signed.apk
