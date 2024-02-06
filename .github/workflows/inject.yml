@@ -54,7 +54,7 @@ jobs:
           New-Item -Path output -ItemType Directory
           powershell "./Il2CppDumper.exe libil2cpp.so global-metadata.dat output; echo Finished."
           $VERSION=$(Get-Content appVersion.txt)
-          echo "VERSION=$VERSION" >> $env:GITHUB_ENV
+          echo "VERSION=v$VERSION" >> $env:GITHUB_ENV
           echo $env:GITHUB_ENV
           cat $env:GITHUB_ENV
 
