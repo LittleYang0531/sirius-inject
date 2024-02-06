@@ -25,6 +25,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: il2cpp
+          retention-days: 1
           path: |
             ./global-metadata.dat
             ./libil2cpp.so
@@ -54,7 +55,7 @@ jobs:
           name: il2cpp
 
       - name: Dumping
-        run: run.bat
+        run: powershell run.bat
 
       - name: Uploading Dump.cs
         uses: softprops/action-gh-release@v1
