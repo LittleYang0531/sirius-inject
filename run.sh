@@ -11,7 +11,7 @@ curl https://github.com/iBotPeaches/Apktool/releases/download/v2.9.0/apktool_2.9
 # Prepare Il2cppDumper
 echo -e "$YELLOW""Downloading Il2CppDumper...""$WHITE"
 curl https://github.com/Perfare/Il2CppDumper/releases/download/v6.7.40/Il2CppDumper-win-v6.7.40.zip -Lo Il2CppDumper.zip
-unzip Il2CppDumper.zip -q
+unzip -q Il2CppDumper.zip
 
 # Judge Application Type And Version
 echo -e "$YELLOW""Fetching Application Information...""$WHITE"
