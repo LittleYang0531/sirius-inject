@@ -15,8 +15,9 @@ jobs:
 
       - name: Prepare Environment
         run: |
+          sudo dpkg --add-architecture i386
           sudo apt update
-          sudo apt install php php-curl curl libnss3 nss-plugin-pem ca-certificates python3 openjdk-17-jdk wine -y
+          sudo apt install php php-curl curl libnss3 nss-plugin-pem ca-certificates python3 openjdk-17-jdk wine wine32 -y
 
       - name: Run Script
         run: bash run.sh
