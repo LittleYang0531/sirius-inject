@@ -50,6 +50,6 @@ fi
 
 echo -e "$YELLOW""Extracting dump.cs...""$WHITE"
 mkdir output
-wine Il2CppDumper.exe libil2cpp.so global-metadata.dat output
+wine64 Il2CppDumper.exe libil2cpp.so global-metadata.dat output
 
 echo -e "$YELLOW""Finished!""$WHITE"
