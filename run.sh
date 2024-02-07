@@ -46,6 +46,38 @@ if [[ $isXAPK == 0 ]]; then
 
     echo -e "$YELLOW""Signing Package...""$WHITE"
     jarsigner -verbose -keystore abc.keystore -storepass 123456 -signedjar sirius_signed.apk sirius.apk abc.keystore
+else
+    echo -e "$YELLOW""Fetching Application Installer...""$WHITE"
+    ./curl_chrome110 --parallel --parallel-immediate --parallel-max 64 -L -k -C - -o sirius.xapk "https://d.cdnpure.com/b/XAPK/com.kms.worlddaistar?version=latest"
+    unzip sirius.xapk
+
+    echo -e "$YELLOW""Unpacking Packages...""$WHITE"
+    java -jar apktool.jar d com.kms.worlddaistar.apk
+    java -jar apktool.jar d config.arm64_v8a.apk
+    java -jar apktool.jar d UnityDataAssetPack.apk
+    cp com.kms.worlddaistar/assets/bin/Data/Managed/Metadata/global-metadata.dat .
+    cp config.arm64_v8a/lib/arm64-v8a/libil2cpp.so .
+
+    echo -e "$YELLOW""Editing Packages...""$WHITE"
+    cp network_security_config.xml com.kms.worlddaistar/res/xml
+    sed -i s/com.kms.worlddaistar/com.kms.worlddaistar2/g com.kms.worlddaistar/AndroidManifest.xml
+    sed -i s/com.kms.worlddaistar/com.kms.worlddaistar2/g config.arm64_v8a/AndroidManifest.xml
+    sed -i s/com.kms.worlddaistar/com.kms.worlddaistar2/g UnityDataAssetPack/AndroidManifest.xml
+    sed -i s/com.kms.worlddaistar2.UnityPlayerActivityOverride/com.kms.worlddaistar.UnityPlayerActivityOverride/g com.kms.worlddaistar/AndroidManifest.xml
+    sed -i s/application\ /application\ android:networkSecurityConfig=\"@xml\\/network_security_config\"\ android:debuggable=\"true\"\ /g com.kms.worlddaistar/AndroidManifest.xml
+    sed -i s/targetSdkVersion:\ 33/targetSdkVersion:\ 29/g com.kms.worlddaistar/apktool.yml
+    cat com.kms.worlddaistar/AndroidManifest.xml
+    cat com.kms.worlddaistar/apktool.yml
+
+    echo -e "$YELLOW""Repacking Packages...""$WHITE"
+    java -jar apktool.jar b com.kms.worlddaistar -o base.apk
+    java -jar apktool.jar b config.arm64_v8a -o config.apk
+    java -jar apktool.jar b UnityDataAssetPack -o unity.apk
+
+    echo -e "$YELLOW""Signing Packages...""$WHITE"
+    jarsigner -verbose -keystore abc.keystore -storepass 123456 -signedjar base_signed.apk base.apk abc.keystore
+    jarsigner -verbose -keystore abc.keystore -storepass 123456 -signedjar config_signed.apk config.apk abc.keystore
+    jarsigner -verbose -keystore abc.keystore -storepass 123456 -signedjar unity_signed.apk unity.apk abc.keystore
 fi
 
 echo -e "$YELLOW""Finished!""$WHITE"
