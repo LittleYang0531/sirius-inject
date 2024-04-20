@@ -2,6 +2,8 @@ name: Inject APK / XAPK (linux-x64 & win-64)
 
 on: 
   workflow_dispatch:
+  schedule: 
+    - cron: '0 8 * * *'
 
 jobs:
   inject:
