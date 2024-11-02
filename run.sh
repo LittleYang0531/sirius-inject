@@ -11,6 +11,9 @@ curl https://github.com/iBotPeaches/Apktool/releases/download/v2.9.0/apktool_2.9
 # Prepare Il2cppDumper
 echo -e "$YELLOW""Downloading Il2CppDumper...""$WHITE"
 curl https://github.com/Perfare/Il2CppDumper/releases/download/v6.7.40/Il2CppDumper-win-v6.7.40.zip -Lo Il2CppDumper.zip
+# Prepare frida-gadget
+echo -e "$YELLOW"Downloading frida-gadget...""$WHITE"
+curl https://github.com/frida/frida/releases/download/16.5.6/frida-gadget-16.5.6-android-arm64.so.xz -Lo frida-gadget.xz
 
 # Judge Application Type And Version
 echo -e "$YELLOW""Fetching Application Information...""$WHITE"
@@ -46,6 +49,18 @@ if [[ $isXAPK == 0 ]]; then
 
     echo -e "$YELLOW""Signing Package...""$WHITE"
     jarsigner -verbose -keystore abc.keystore -storepass 123456 -signedjar sirius_signed.apk sirius.apk abc.keystore
+
+    echo -e "$YELLOW""Injecting Frida Gadget...""$WHITE"
+    tar -xvf frida-gadget.xz
+    mv frida-gadget-16.5.6-android-arm64.so sirius/lib/arm64-v8a/libfrida-gadget.so
+    sed -i s/.method\ public\ constructor\ \<init\>\(\)V/.method\ public\ constructor\ \<init\>\(\)V\n\ \ \ \ const-string\ v0\,\ \"frida\"\n\ \ \ \ invoke-static\ \{v0\}\,\ Ljava\/lang\/System\;\-\>loadLibrary\(Ljava\/lang\/String\;\)V/g sirius/smali/com/kms/worlddaistar/UnityPlayerActivityOverride.smali
+    cat sirius/smali/com/kms/worlddaistar/UnityPlayerActivityOverride.smali
+
+    echo -e "$YELLOW""Repacking Package...""$WHITE"
+    java -jar apktool.jar b sirius -o sirius_frida.apk
+
+    echo -e "$YELLOW""Signing Package...""$WHITE"
+    jarsigner -verbose -keystore abc.keystore -storepass 123456 -signedjar sirius_frida_signed.apk sirius_frida.apk abc.keystore
 else
     echo -e "$YELLOW""Fetching Application Installer...""$WHITE"
     ./curl_chrome110 --parallel --parallel-immediate --parallel-max 64 -L -k -C - -o sirius.xapk "https://d.cdnpure.com/b/XAPK/com.kms.worlddaistar?version=latest"
@@ -78,6 +93,18 @@ else
     jarsigner -verbose -keystore abc.keystore -storepass 123456 -signedjar base_signed.apk base.apk abc.keystore
     jarsigner -verbose -keystore abc.keystore -storepass 123456 -signedjar config_signed.apk config.apk abc.keystore
     jarsigner -verbose -keystore abc.keystore -storepass 123456 -signedjar unity_signed.apk unity.apk abc.keystore
+
+    echo -e "$YELLOW""Injecting Frida Gadget...""$WHITE"
+    tar -xvf frida-gadget.xz
+    mv frida-gadget-16.5.6-android-arm64.so com.kms.worlddaistar/lib/arm64-v8a/libfrida-gadget.so
+    sed -i s/.method\ public\ constructor\ \<init\>\(\)V/.method\ public\ constructor\ \<init\>\(\)V\n\ \ \ \ const-string\ v0\,\ \"frida\"\n\ \ \ \ invoke-static\ \{v0\}\,\ Ljava\/lang\/System\;\-\>loadLibrary\(Ljava\/lang\/String\;\)V/g com.kms.worlddaistar/smali/com/kms/worlddaistar/UnityPlayerActivityOverride.smali
+    cat com.kms.worlddaistar/smali/com/kms/worlddaistar/UnityPlayerActivityOverride.smali
+
+    echo -e "$YELLOW""Repacking Package...""$WHITE"
+    java -jar apktool.jar b com.kms.worlddaistar -o base_frida.apk
+
+    echo -e "$YELLOW""Signing Package...""$WHITE"
+    jarsigner -verbose -keystore abc.keystore -storepass 123456 -signedjar base_frida_signed.apk base_frida.apk abc.keystore
 fi
 
 echo -e "$YELLOW""Finished!""$WHITE"
