@@ -13,7 +13,7 @@ echo -e "$YELLOW""Downloading Il2CppDumper...""$WHITE"
 curl https://github.com/Perfare/Il2CppDumper/releases/download/v6.7.40/Il2CppDumper-win-v6.7.40.zip -Lo Il2CppDumper.zip
 # Prepare frida-gadget
 echo -e "$YELLOW""Downloading frida-gadget...""$WHITE"
-curl https://github.com/frida/frida/releases/download/16.5.6/frida-gadget-16.5.6-android-arm64.so.xz -Lo frida-gadget.xz
+curl https://github.com/frida/frida/releases/download/16.5.6/frida-gadget-16.5.6-android-arm64.so.xz -Lo frida-gadget.so.xz
 
 # Judge Application Type And Version
 echo -e "$YELLOW""Fetching Application Information...""$WHITE"
@@ -51,8 +51,8 @@ if [[ $isXAPK == 0 ]]; then
     jarsigner -verbose -keystore abc.keystore -storepass 123456 -signedjar sirius_signed.apk sirius.apk abc.keystore
 
     echo -e "$YELLOW""Injecting Frida Gadget...""$WHITE"
-    tar -xvf frida-gadget.xz
-    mv frida-gadget-16.5.6-android-arm64.so sirius/lib/arm64-v8a/libfrida-gadget.so
+    xz -d frida-gadget.so.xz
+    mv frida-gadget.so com.kms.worlddaistar/lib/arm64-v8a/libfrida-gadget.so
     sed -i s/.method\ public\ constructor\ \<init\>\(\)V/.method\ public\ constructor\ \<init\>\(\)V\n\ \ \ \ const-string\ v0\,\ \"frida\"\n\ \ \ \ invoke-static\ \{v0\}\,\ Ljava\/lang\/System\;\-\>loadLibrary\(Ljava\/lang\/String\;\)V/g sirius/smali/com/kms/worlddaistar/UnityPlayerActivityOverride.smali
     cat sirius/smali/com/kms/worlddaistar/UnityPlayerActivityOverride.smali
 
@@ -95,9 +95,9 @@ else
     jarsigner -verbose -keystore abc.keystore -storepass 123456 -signedjar unity_signed.apk unity.apk abc.keystore
 
     echo -e "$YELLOW""Injecting Frida Gadget...""$WHITE"
-    tar -xvf frida-gadget.xz
-    mv frida-gadget-16.5.6-android-arm64.so com.kms.worlddaistar/lib/arm64-v8a/libfrida-gadget.so
-    sed -i s/.method\ public\ constructor\ \<init\>\(\)V/.method\ public\ constructor\ \<init\>\(\)V\n\ \ \ \ const-string\ v0\,\ \"frida\"\n\ \ \ \ invoke-static\ \{v0\}\,\ Ljava\/lang\/System\;\-\>loadLibrary\(Ljava\/lang\/String\;\)V/g com.kms.worlddaistar/smali/com/kms/worlddaistar/UnityPlayerActivityOverride.smali
+    xz -d frida-gadget.so.xz
+    mv frida-gadget.so com.kms.worlddaistar/lib/arm64-v8a/libfrida-gadget.so
+    sed -i s/.method\ public\ constructor\ \<init\>\(\)V/.method\ public\ constructor\ \<init\>\(\)V\\n\ \ \ \ const-string\ v0\,\ \"frida\"\\n\ \ \ \ invoke-static\ \{v0\}\,\ Ljava\\/lang\\/System\;\-\>loadLibrary\(Ljava\\/lang\\/String\;\)V/g com.kms.worlddaistar/smali/com/kms/worlddaistar/UnityPlayerActivityOverride.smali
     cat com.kms.worlddaistar/smali/com/kms/worlddaistar/UnityPlayerActivityOverride.smali
 
     echo -e "$YELLOW""Repacking Package...""$WHITE"
