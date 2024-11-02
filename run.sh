@@ -12,7 +12,7 @@ curl https://github.com/iBotPeaches/Apktool/releases/download/v2.9.0/apktool_2.9
 echo -e "$YELLOW""Downloading Il2CppDumper...""$WHITE"
 curl https://github.com/Perfare/Il2CppDumper/releases/download/v6.7.40/Il2CppDumper-win-v6.7.40.zip -Lo Il2CppDumper.zip
 # Prepare frida-gadget
-echo -e "$YELLOW"Downloading frida-gadget...""$WHITE"
+echo -e "$YELLOW""Downloading frida-gadget...""$WHITE"
 curl https://github.com/frida/frida/releases/download/16.5.6/frida-gadget-16.5.6-android-arm64.so.xz -Lo frida-gadget.xz
 
 # Judge Application Type And Version
