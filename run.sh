@@ -97,7 +97,7 @@ else
     echo -e "$YELLOW""Injecting Frida Gadget...""$WHITE"
     xz -d frida-gadget.so.xz
     mv frida-gadget.so config.arm64_v8a/lib/arm64-v8a/libfrida-gadget.so
-    sed -i s/.method\ public\ constructor\ \<init\>\(\)V/.method\ public\ constructor\ \<init\>\(\)V\\n\ \ \ \ const-string\ v0\,\ \"frida\"\\n\ \ \ \ invoke-static\ \{v0\}\,\ Ljava\\/lang\\/System\;\-\>loadLibrary\(Ljava\\/lang\\/String\;\)V/g com.kms.worlddaistar/smali/com/kms/worlddaistar/UnityPlayerActivityOverride.smali
+    sed -i s/.method\ public\ constructor\ \<init\>\(\)V/.method\ public\ constructor\ \<init\>\(\)V\\n\ \ \ \ const-string\ v0\,\ \"frida-gadget\"\\n\ \ \ \ invoke-static\ \{v0\}\,\ Ljava\\/lang\\/System\;\-\>loadLibrary\(Ljava\\/lang\\/String\;\)V/g com.kms.worlddaistar/smali/com/kms/worlddaistar/UnityPlayerActivityOverride.smali
 
     echo -e "$YELLOW""Repacking Package...""$WHITE"
     java -jar apktool.jar b com.kms.worlddaistar -o base_frida.apk
