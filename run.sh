@@ -10,7 +10,7 @@ echo -e "$YELLOW""Downloading apktool_2.9.0.jar...""$WHITE"
 curl https://github.com/iBotPeaches/Apktool/releases/download/v2.9.0/apktool_2.9.0.jar -Lo apktool.jar
 # Prepare Il2cppDumper
 echo -e "$YELLOW""Downloading Il2CppDumper...""$WHITE"
-curl https://github.com/Perfare/Il2CppDumper/releases/download/v6.7.40/Il2CppDumper-win-v6.7.40.zip -Lo Il2CppDumper.zip
+curl https://github.com/LittleYang0531/sirius-inject/releases/download/tool/Il2cppDumper.zip -Lo Il2CppDumper.zip
 # Prepare frida-gadget
 echo -e "$YELLOW""Downloading frida-gadget...""$WHITE"
 curl https://github.com/frida/frida/releases/download/16.5.6/frida-gadget-16.5.6-android-arm64.so.xz -Lo frida-gadget.so.xz
