@@ -17,7 +17,7 @@ curl https://github.com/frida/frida/releases/download/16.5.6/frida-gadget-16.5.6
 
 # Judge Application Type And Version
 echo -e "$YELLOW""Fetching Application Information...""$WHITE"
-HTML=$(./curl_chrome110 https://apkpure.net/cn/%E3%83%AF%E3%83%BC%E3%83%AB%E3%83%89%E3%83%80%E3%82%A4%E3%82%B9%E3%82%BF%E3%83%BC-%E5%A4%A2%E3%81%AE%E3%82%B9%E3%83%86%E3%83%A9%E3%83%AA%E3%82%A6%E3%83%A0/com.kms.worlddaistar/download 2>/dev/null)
+HTML=$(./curl_chrome116 https://apkpure.net/cn/%E3%83%AF%E3%83%BC%E3%83%AB%E3%83%89%E3%83%80%E3%82%A4%E3%82%B9%E3%82%BF%E3%83%BC-%E5%A4%A2%E3%81%AE%E3%82%B9%E3%83%86%E3%83%A9%E3%83%AA%E3%82%A6%E3%83%A0/com.kms.worlddaistar/download 2>/dev/null)
 echo $HTML
 VERSION=$(echo $HTML | sed -n 's/^.*"version":"\([0-9.]\+\).*$/\1/gp')
 isXAPK=$([ -z "$(echo $HTML | grep "下载 XAPK")" ] && echo 0 || echo 1)
@@ -31,7 +31,7 @@ echo $VERSION > "appVersion.txt"
 
 if [[ $isXAPK == 0 ]]; then
     echo -e "$YELLOW""Fetching Application Installer...""$WHITE"
-    ./curl_chrome110 --parallel --parallel-immediate --parallel-max 64 -L -k -C - -o sirius.apk "https://d.cdnpure.com/b/APK/com.kms.worlddaistar?version=latest"
+    ./curl_chrome116 --parallel --parallel-immediate --parallel-max 64 -L -k -C - -o sirius.apk "https://d.cdnpure.com/b/APK/com.kms.worlddaistar?version=latest"
 
     echo -e "$YELLOW""Unpacking Package...""$WHITE"
     java -jar apktool.jar d sirius.apk
