@@ -3,7 +3,7 @@ WHITE='\033[0m'
 
 # Prepare curl-impersonate
 echo -e "$YELLOW""Downloading curl-impersonate.tar.gz...""$WHITE"
-curl https://github.com/lwthiker/curl-impersonate/releases/download/v0.5.4/curl-impersonate-v0.5.4.x86_64-linux-gnu.tar.gz -Lo curl.tar.gz
+curl https://github.com/lwthiker/curl-impersonate/releases/download/v0.6.1/curl-impersonate-v0.6.1.x86_64-linux-gnu.tar.gz -Lo curl.tar.gz
 tar -xvf curl.tar.gz >/dev/null
 # Prepare apktool
 echo -e "$YELLOW""Downloading apktool_2.9.0.jar...""$WHITE"
@@ -17,7 +17,7 @@ curl https://github.com/frida/frida/releases/download/16.5.6/frida-gadget-16.5.6
 
 # Judge Application Type And Version
 echo -e "$YELLOW""Fetching Application Information...""$WHITE"
-HTML=$(./curl_chrome110 https://apkpure.com/cn/%E3%83%AF%E3%83%BC%E3%83%AB%E3%83%89%E3%83%80%E3%82%A4%E3%82%B9%E3%82%BF%E3%83%BC-%E5%A4%A2%E3%81%AE%E3%82%B9%E3%83%86%E3%83%A9%E3%83%AA%E3%82%A6%E3%83%A0/com.kms.worlddaistar/download 2>/dev/null)
+HTML=$(./curl_chrome110 https://apkpure.net/cn/%E3%83%AF%E3%83%BC%E3%83%AB%E3%83%89%E3%83%80%E3%82%A4%E3%82%B9%E3%82%BF%E3%83%BC-%E5%A4%A2%E3%81%AE%E3%82%B9%E3%83%86%E3%83%A9%E3%83%AA%E3%82%A6%E3%83%A0/com.kms.worlddaistar/download 2>/dev/null)
 echo $HTML
 VERSION=$(echo $HTML | sed -n 's/^.*"version":"\([0-9.]\+\).*$/\1/gp')
 isXAPK=$([ -z "$(echo $HTML | grep "下载 XAPK")" ] && echo 0 || echo 1)
